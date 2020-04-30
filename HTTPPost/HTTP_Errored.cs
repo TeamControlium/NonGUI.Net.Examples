@@ -1,6 +1,6 @@
 ﻿
 
-namespace HTTPPost
+namespace Examples
 {
     using System;
     using System.Net.Security;
@@ -10,22 +10,11 @@ namespace HTTPPost
     using TeamControlium.Utilities;
     using System.Security.Cryptography.X509Certificates;
 
-    static class Errored
+    static class HTTP_Errored
     {
         private static List<string> logOutput = new List<string>();
 
-        public static void LogDelegate(string logLine)
-        {
-            logOutput.Add(logLine);
-        }
-
-
-        private static bool RejectHTTPSCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            return false;
-        }
-
-        public static void NonExistantDomain()
+        public static void Example_NonExistantDomain()
         {
             // Set a non-existant domain.
             string url = "non.existant.domain/post";
@@ -63,7 +52,7 @@ namespace HTTPPost
 
         }
 
-        public static void InvalidResourcePath()
+        public static void Example_InvalidResourcePath()
         {
             // Set a non-existant domain.  postman-echo.com exists but not the path /not/here
             string url = "postman-echo.com/not/here"; ;
@@ -98,16 +87,7 @@ namespace HTTPPost
                 "We try to access a non-existant resource and so the HTTP server responds with a 404 error");
         }
 
-        /// <summary>
-        /// Make HTTP POst call with no Connection: Close in header
-        /// </summary>
-        /// <remarks>
-        /// This demonstrates the NonGUI functionality for an HPP POST call made with no Connection: Close being defined in header.  NonGUI does NOT make async TCP calls
-        /// as the target may be defective and so could fail.  Therefore, is the connection is 'keep-alive' (HTTP Default) then we will get a timeout..
-        /// 
-        /// Uncomment the line defining the Connection: Close header item to see the same code run with no timeout.
-        /// </remarks>
-        public static void ConnectionTimeout()
+        public static void Example_ConnectionTimeout()
         {
             // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -143,7 +123,7 @@ namespace HTTPPost
                 "As HTTPBased does not handle Async connections a timeout occures");
         }
 
-        public static void BadHTTPHeaderItem()
+        public static void Example_BadHTTPHeaderItem()
         {
             // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -179,7 +159,7 @@ namespace HTTPPost
                 "And so we see the request succeeds but the HTTP Response is a 400 (Bad Request)");
         }
 
-        public static void BadlyFormedHTTPHeaderString()
+        public static void Example_BadlyFormedHTTPHeaderString()
         {
              // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -210,7 +190,7 @@ namespace HTTPPost
                 "And so we see the request succeeds but the HTTP Response is a 400 (Bad Request)");
         }
 
-        public static void BadlyFormedHTTPHeaderBySetting()
+        public static void Example_BadlyFormedHTTPHeaderBySetting()
         {
             // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -250,7 +230,7 @@ namespace HTTPPost
                 "the request succeeds but the HTTP Response is a 400 (Bad Request)");
         }
 
-        public static void RejectSSLCertificate()
+        public static void Example_RejectSSLCertificate()
         {
             // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -292,7 +272,7 @@ namespace HTTPPost
                 "forces NonGUI to reject the server certificate and so causes the exception.");
         }
 
-        public static void RejectSSLCertificateUsingCustomDelegate()
+        public static void Example_RejectSSLCertificateUsingCustomDelegate()
         {
             // We use the Postman example website for this as the server is well setup for examples.
             string url = "postman-echo.com/post";
@@ -328,11 +308,20 @@ namespace HTTPPost
 
             OutputDetails("Example of using the SSL Certificate validation override to reject an SSL certificate", result, httpRequest, response,
                 "We have set UseSSL to true (which tells NonGUI to use HTTPS rather tha HTTP) and we have set",
-                "CertificateValidationCallback to our own certificate validation method.  In the mathod we simply",
-                "force the certificate to be rejected; hence the exception.  In testing, we could use the callback",
+                "CertificateValidationCallback to our own certificate validation method (RejectHTTPSCertificate) which",
+                "forces the certificate to be rejected; hence the exception.  In testing, we could use the callback",
                 "to actually inspect and verify the certificate as part of testing if we so wished.");
         }
 
+        private static void LogDelegate(string logLine)
+        {
+            logOutput.Add(logLine);
+        }
+
+        private static bool RejectHTTPSCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return false;
+        }
 
         private static void OutputDetails(string heading, bool result, HTTPBased httpRequest, HTTPBased.ItemList response, params string[] details)
         {
@@ -344,6 +333,10 @@ namespace HTTPPost
 
             // Finally, give the details of the call.
             Console.WriteLine(heading);
+            if (details.Length > 0)
+            {
+                Console.WriteLine(" - ");
+            }
             foreach (string detailItem in details)
             {
                 Console.WriteLine(" - " + detailItem);

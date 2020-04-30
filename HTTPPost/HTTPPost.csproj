@@ -6,13 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="TeamControlium.NonGUI" Version="2.0.6" />
     <PackageReference Include="TeamControlium.Utilities" Version="2.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="TeamControlium.NonGUI">
-      <HintPath>..\..\NonGUI.net\NonGUI.net\bin\Release\netcoreapp3.1\TeamControlium.NonGUI.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
